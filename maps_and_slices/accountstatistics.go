@@ -26,5 +26,22 @@ func AccountIdBinaryOperator(left, right Account) Account {
 // - The Account with the highest balance.
 // - A boolean indicating whether the slice contained any accounts (false if the slice was empty).
 func FindRichestPerson(accounts []Account, mergeFunction AccountBinaryOperator) (Account, bool) {
-	panic("not implemented")
+	var result Account
+
+	if mergeFunction == nil {
+		mergeFunction = AccountIdBinaryOperator
+	}
+
+	if len(accounts) > 0 {
+		result = accounts[0]
+	}
+	for i := 1; i < len(accounts); i++ {
+		if accounts[i].Balance.GreaterThan(result.Balance) {
+			result = accounts[i]
+		} else if accounts[i].Balance.Equal(result.Balance) {
+			result = mergeFunction(result, accounts[i])
+		}
+	}
+
+	return result, len(accounts) > 0
 }
