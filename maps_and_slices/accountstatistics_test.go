@@ -1,7 +1,21 @@
 package maps_and_slices
 
 import (
+	"cmp"
+	"maps"
+	"slices"
 	"testing"
+)
+
+var (
+	accountIdComparator = func(a, b Account) int {
+		return cmp.Compare(a.ID, b.ID)
+	}
+	accountSliceInAnyOrderComparator = func(left []Account, right []Account) bool {
+		slices.SortFunc(left, accountIdComparator)
+		slices.SortFunc(right, accountIdComparator)
+		return slices.Equal(left, right)
+	}
 )
 
 func TestFindRichestPerson(t *testing.T) {
@@ -20,14 +34,14 @@ func TestFindRichestPerson(t *testing.T) {
 			nil,
 		},
 		{
-			"returns false when accounts list is nil",
+			"returns false when accounts slice is nil",
 			false,
 			ZeroAccount,
 			nil,
 			nil,
 		},
 		{
-			"returns false when accounts list is empty",
+			"returns false when accounts slice is empty",
 			false,
 			ZeroAccount,
 			[]Account{},
@@ -36,29 +50,29 @@ func TestFindRichestPerson(t *testing.T) {
 		{
 			"finds account with zero balance",
 			true,
-			ZeroAccount,
-			[]Account{ZeroAccount},
+			Accounts[9],
+			Accounts[9:],
 			nil,
 		},
 		{
 			"finds account with zero balance among several zero-balance accounts",
 			true,
-			ZeroAccount,
-			[]Account{ZeroAccount, ZeroAccount, ZeroAccount, ZeroAccount},
+			Accounts[9],
+			Accounts[6:10],
 			nil,
 		},
 		{
 			"finds account with negative balance",
 			true,
-			NegativeAccount,
-			[]Account{NegativeAccount},
+			Accounts[6],
+			Accounts[6:7],
 			nil,
 		},
 		{
 			"finds account with negative balance among several negative-balance accounts",
 			true,
-			NegativeAccount,
-			[]Account{NegativeAccount, NegativeAccount, NegativeAccount, NegativeAccount},
+			Accounts[7],
+			Accounts[6:9],
 			nil,
 		},
 		{
@@ -91,6 +105,39 @@ func TestFindRichestPerson(t *testing.T) {
 			}
 			if tt.want != got {
 				t.Errorf("want %+v, got %+v", tt.want, got)
+			}
+		})
+	}
+}
+
+func TestPartitionAccountsBySex(t *testing.T) {
+	table := []struct {
+		name        string
+		partitioned map[bool][]Account
+		accounts    []Account
+	}{
+		{
+			"partitions accounts by sex",
+			AccountsPartitionedBySex,
+			Accounts,
+		},
+		{
+			"returns empty map when accounts slice is nil",
+			make(map[bool][]Account),
+			nil,
+		},
+		{
+			"returns empty map when accounts slice is empty",
+			make(map[bool][]Account),
+			[]Account{},
+		},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.name, func(t *testing.T) {
+			got := PartitionAccountsBySex(tt.accounts)
+			if !maps.EqualFunc(got, tt.partitioned, accountSliceInAnyOrderComparator) {
+				t.Errorf("want %+v, got %+v", tt.partitioned, got)
 			}
 		})
 	}
