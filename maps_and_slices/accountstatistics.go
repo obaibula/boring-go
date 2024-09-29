@@ -1,13 +1,20 @@
 package maps_and_slices
 
-type AccountBinaryOperator func(left, right Account) Account
-
-func AccountIdBinaryOperator(left, right Account) Account {
-	if left.ID < right.ID {
-		return left
-	} else {
-		return right
+// PartitionAccountsBySex partitions a slice of Accounts into a map based on their sex.
+// The resulting map contains two keys: true for Male accounts and false for Female accounts.
+//
+// Params:
+//   - accounts: A slice of Account structures to partition by sex.
+//
+// Returns:
+//   - A map where the keys are booleans indicating the sex (true for Male, false for Female),
+//     and the values are slices of Account structures corresponding to each sex.
+func PartitionAccountsBySex(accounts []Account) map[bool][]Account {
+	partitioned := make(map[bool][]Account)
+	for _, a := range accounts {
+		partitioned[a.Sex == Male] = append(partitioned[a.Sex == Male], a)
 	}
+	return partitioned
 }
 
 // FindRichestPerson finds and returns the account with the highest balance from a slice of Accounts.
@@ -44,4 +51,14 @@ func FindRichestPerson(accounts []Account, mergeFunction AccountBinaryOperator) 
 	}
 
 	return result, len(accounts) > 0
+}
+
+type AccountBinaryOperator func(left, right Account) Account
+
+func AccountIdBinaryOperator(left, right Account) Account {
+	if left.ID < right.ID {
+		return left
+	} else {
+		return right
+	}
 }
