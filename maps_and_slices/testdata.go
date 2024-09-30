@@ -70,7 +70,7 @@ var Accounts = []Account{
 		ID:           6,
 		FirstName:    "Sebastian",
 		LastName:     "Kurz",
-		Email:        "sebastian.kurz@protonmail.com",
+		Email:        "sebastian.kurz@hotmail.com",
 		Birthday:     parseDate("1986-08-27"),
 		Sex:          Male,
 		CreationDate: parseDate("2021-06-22"),
@@ -134,6 +134,14 @@ var AccountsPartitionedBySex = map[bool][]Account{
 		Accounts[1],
 		Accounts[7],
 	},
+}
+
+var AccountsGroupedByEmailDomain = map[string][]Account{
+	"gmail.com":   {Accounts[0], Accounts[5], Accounts[7], Accounts[9]},
+	"icloud.com":  {Accounts[1], Accounts[8]},
+	"yahoo.com":   {Accounts[2]},
+	"outlook.com": {Accounts[3]},
+	"hotmail.com": {Accounts[4], Accounts[6]},
 }
 
 var (

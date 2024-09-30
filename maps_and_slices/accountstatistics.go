@@ -13,6 +13,19 @@ func PartitionAccountsBySex(accounts []Account) map[bool][]Account {
 	panic("not implemented")
 }
 
+// GroupAccountsByEmailDomain groups a slice of Accounts by their email domain.
+// The resulting map contains email domains as keys and slices of Accounts associated with each domain as values.
+//
+// Params:
+//   - accounts: A slice of Account structures to group by email domain.
+//
+// Returns:
+//   - A map where the keys are email domains (extracted from the account's email address), and the values
+//     are slices of Account structures that share the same email domain.
+func GroupAccountsByEmailDomain(accounts []Account) map[string][]Account {
+	panic("not implemented")
+}
+
 // FindRichestPerson finds and returns the account with the highest balance from a slice of Accounts.
 // If the slice is empty, it returns false using the comma-ok idiom.
 //
