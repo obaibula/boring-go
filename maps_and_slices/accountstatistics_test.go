@@ -11,10 +11,10 @@ var (
 	accountIdComparator = func(a, b Account) int {
 		return cmp.Compare(a.ID, b.ID)
 	}
-	accountSliceInAnyOrderComparator = func(left []Account, right []Account) bool {
-		slices.SortFunc(left, accountIdComparator)
-		slices.SortFunc(right, accountIdComparator)
-		return slices.Equal(left, right)
+	accountSliceInAnyOrderComparator = func(a []Account, b []Account) bool {
+		slices.SortFunc(a, accountIdComparator)
+		slices.SortFunc(b, accountIdComparator)
+		return slices.Equal(a, b)
 	}
 )
 
@@ -141,4 +141,21 @@ func TestPartitionAccountsBySex(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestGroupAccountsByEmailDomain(t *testing.T) {
+	t.Run("groups accounts by email domain", func(t *testing.T) {
+		want := AccountsGroupedByEmailDomain
+		got := GroupAccountsByEmailDomain(Accounts)
+		if !maps.EqualFunc(got, want, accountSliceInAnyOrderComparator) {
+			t.Errorf("want %+v, got %+v", want, got)
+		}
+	})
+	t.Run("groups accounts and ignores corrupted emails", func(t *testing.T) {
+		want := AccountsGroupedByEmailDomain
+		got := GroupAccountsByEmailDomain(append(Accounts, Account{Email: "bademail"}))
+		if !maps.EqualFunc(got, want, accountSliceInAnyOrderComparator) {
+			t.Errorf("want %+v, got %+v", want, got)
+		}
+	})
 }

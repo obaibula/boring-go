@@ -1,5 +1,9 @@
 package maps_and_slices
 
+import (
+	"strings"
+)
+
 // PartitionAccountsBySex partitions a slice of Accounts into a map based on their sex.
 // The resulting map contains two keys: true for Male accounts and false for Female accounts.
 //
@@ -15,6 +19,25 @@ func PartitionAccountsBySex(accounts []Account) map[bool][]Account {
 		partitioned[a.Sex == Male] = append(partitioned[a.Sex == Male], a)
 	}
 	return partitioned
+}
+
+// GroupAccountsByEmailDomain groups a slice of Accounts by their email domain.
+// The resulting map contains email domains as keys and slices of Accounts associated with each domain as values.
+//
+// Params:
+//   - accounts: A slice of Account structures to group by email domain.
+//
+// Returns:
+//   - A map where the keys are email domains (extracted from the account's email address), and the values
+//     are slices of Account structures that share the same email domain.
+func GroupAccountsByEmailDomain(accounts []Account) map[string][]Account {
+	grouped := make(map[string][]Account)
+	for _, a := range accounts {
+		if _, domain, ok := strings.Cut(a.Email, "@"); ok {
+			grouped[domain] = append(grouped[domain], a)
+		}
+	}
+	return grouped
 }
 
 // FindRichestPerson finds and returns the account with the highest balance from a slice of Accounts.
