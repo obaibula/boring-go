@@ -22,17 +22,17 @@ func PartitionAccountsBySex(accounts []Account) map[bool][]Account {
 //
 // Params:
 //   - accounts: A slice of Account structures to search through.
-//   - mergeFunction: A custom function (AccountBinaryOperator) that determines how to resolve ties
+//   - mergeFunction: A custom BinaryOperator that determines how to resolve ties
 //     between accounts with equal balances. If nil, AccountIdBinaryOperator is used.
 //
 // Returns:
 // - The Account with the highest balance.
 // - A boolean indicating whether the slice contained any accounts (false if the slice was empty).
-func FindRichestPerson(accounts []Account, mergeFunction AccountBinaryOperator) (Account, bool) {
+func FindRichestPerson(accounts []Account, mergeFunction BinaryOperator[Account]) (Account, bool) {
 	panic("not implemented")
 }
 
-type AccountBinaryOperator func(left, right Account) Account
+type BinaryOperator[T any] func(left, right T) T
 
 func AccountIdBinaryOperator(left, right Account) Account {
 	if left.ID < right.ID {

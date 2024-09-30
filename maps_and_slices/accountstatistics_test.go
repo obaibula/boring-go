@@ -24,7 +24,7 @@ func TestFindRichestPerson(t *testing.T) {
 		foundRichest  bool
 		want          Account
 		accounts      []Account
-		mergeFunction AccountBinaryOperator
+		mergeFunction BinaryOperator[Account]
 	}{
 		{
 			"finds richest person among multiple accounts",
