@@ -1,6 +1,6 @@
 package maps_and_slices
 
-// PartitionAccountsBySex partitions a slice of Accounts into a map based on their sex.
+// PartitionAccountsBySex partitions a slice of accounts into a map based on their sex.
 // The resulting map contains two keys: true for Male accounts and false for Female accounts.
 //
 // Params:
@@ -13,8 +13,8 @@ func PartitionAccountsBySex(accounts []Account) map[bool][]Account {
 	panic("not implemented")
 }
 
-// GroupAccountsByEmailDomain groups a slice of Accounts by their email domain.
-// The resulting map contains email domains as keys and slices of Accounts associated with each domain as values.
+// GroupAccountsByEmailDomain groups a slice of accounts by their email domain.
+// The resulting map contains email domains as keys and slices of accounts associated with each domain as values.
 //
 // Params:
 //   - accounts: A slice of Account structures to group by email domain.
@@ -26,7 +26,7 @@ func GroupAccountsByEmailDomain(accounts []Account) map[string][]Account {
 	panic("not implemented")
 }
 
-// FindRichestPerson finds and returns the account with the highest balance from a slice of Accounts.
+// FindRichestPerson finds and returns the account with the highest balance from a slice of accounts.
 // If the slice is empty, it returns false using the comma-ok idiom.
 //
 // In case multiple accounts have the same highest balance, the function uses a provided mergeFunction

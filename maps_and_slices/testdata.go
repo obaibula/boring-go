@@ -5,7 +5,52 @@ import (
 	"time"
 )
 
-var Accounts = []Account{
+var (
+	zeroAccount        = Account{}
+	zeroBalanceAccount = accounts[9]
+	theRichestPerson   = accounts[3]
+	conflictingAccount = Account{
+		ID:           3,
+		FirstName:    "Pedro",
+		LastName:     "Ránchez",
+		Email:        "pedro.ranchez@outlook.com",
+		Birthday:     parseDate("1972-02-29"),
+		Sex:          Male,
+		CreationDate: parseDate("2015-08-29"),
+		Balance:      decimal.NewFromFloat(700000.30),
+	}
+
+	negativeBalanceAccounts      = accounts[6:9]
+	accountsWithBalanceCollision = append(accounts, conflictingAccount)
+
+	accountsPartitionedBySex     = map[bool][]Account{true: maleAccounts, false: femaleAccounts}
+	accountsGroupedByEmailDomain = map[string][]Account{
+		"gmail.com":   {accounts[0], accounts[5], accounts[7], accounts[9]},
+		"icloud.com":  {accounts[1], accounts[8]},
+		"yahoo.com":   {accounts[2]},
+		"outlook.com": {accounts[3]},
+		"hotmail.com": {accounts[4], accounts[6]},
+	}
+)
+
+var (
+	maleAccounts = []Account{
+		accounts[0],
+		accounts[2],
+		accounts[3],
+		accounts[4],
+		accounts[5],
+		accounts[6],
+	}
+	femaleAccounts = []Account{
+		accounts[9],
+		accounts[8],
+		accounts[1],
+		accounts[7],
+	}
+)
+
+var accounts = []Account{
 	{
 		ID:           0,
 		FirstName:    "Emmanuel",
@@ -107,47 +152,6 @@ var Accounts = []Account{
 		Balance:      decimal.Zero,
 	},
 }
-
-var ConflictingAccount = Account{
-	ID:           3,
-	FirstName:    "Pedro",
-	LastName:     "Ránchez",
-	Email:        "pedro.ranchez@outlook.com",
-	Birthday:     parseDate("1972-02-29"),
-	Sex:          Male,
-	CreationDate: parseDate("2015-08-29"),
-	Balance:      decimal.NewFromFloat(700000.30),
-}
-
-var AccountsPartitionedBySex = map[bool][]Account{
-	true: {
-		Accounts[0],
-		Accounts[2],
-		Accounts[3],
-		Accounts[4],
-		Accounts[5],
-		Accounts[6],
-	},
-	false: {
-		Accounts[9],
-		Accounts[8],
-		Accounts[1],
-		Accounts[7],
-	},
-}
-
-var AccountsGroupedByEmailDomain = map[string][]Account{
-	"gmail.com":   {Accounts[0], Accounts[5], Accounts[7], Accounts[9]},
-	"icloud.com":  {Accounts[1], Accounts[8]},
-	"yahoo.com":   {Accounts[2]},
-	"outlook.com": {Accounts[3]},
-	"hotmail.com": {Accounts[4], Accounts[6]},
-}
-
-var (
-	AccountsWithBalanceCollision = append(Accounts, ConflictingAccount)
-	ZeroAccount                  = Account{}
-)
 
 func parseDate(dateStr string) time.Time {
 	t, err := time.Parse(time.DateOnly, dateStr)
