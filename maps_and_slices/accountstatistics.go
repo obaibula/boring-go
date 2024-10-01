@@ -1,8 +1,28 @@
 package maps_and_slices
 
 import (
+	"github.com/shopspring/decimal"
 	"strings"
 )
+
+// GetTotalBalance calculates and returns the total balance from a slice of accounts.
+// If the slice is empty or nil, it returns false using the comma-ok idiom.
+//
+// Params:
+//   - accounts: A slice of Account structures from which to calculate the total balance.
+//
+// Returns:
+//   - A decimal.Decimal representing the total balance of all accounts combined.
+//   - A boolean indicating whether the slice contained any accounts (false if the slice was empty).
+func GetTotalBalance(accounts []Account) (decimal.Decimal, bool) {
+	total := decimal.Zero
+	ok := false
+	for _, a := range accounts {
+		total = total.Add(a.Balance)
+		ok = true
+	}
+	return total, ok
+}
 
 // PartitionAccountsBySex partitions a slice of accounts into a map based on their sex.
 // The resulting map contains two keys: true for Male accounts and false for Female accounts.

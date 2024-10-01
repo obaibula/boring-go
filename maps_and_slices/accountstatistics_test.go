@@ -2,6 +2,7 @@ package maps_and_slices
 
 import (
 	"cmp"
+	"github.com/shopspring/decimal"
 	"maps"
 	"slices"
 	"testing"
@@ -157,6 +158,25 @@ func TestGroupAccountsByEmailDomain(t *testing.T) {
 		got := GroupAccountsByEmailDomain(append(accounts, Account{Email: "bademail"}))
 		if !maps.EqualFunc(got, want, accountSliceInAnyOrderComparator) {
 			t.Errorf("want %+v, got %+v", want, got)
+		}
+	})
+}
+
+func TestGetTotalBalance(t *testing.T) {
+	t.Run("gets total balance", func(t *testing.T) {
+		want := decimal.NewFromFloat(1_985_001.65)
+		got, ok := GetTotalBalance(accounts)
+		if !ok {
+			t.Fatalf("expected ok as %t, got %t", true, ok)
+		}
+		if !want.Equal(got) {
+			t.Errorf("want %+v, got %+v", want, got)
+		}
+	})
+	t.Run("returns false when accounts slice is empty", func(t *testing.T) {
+		_, ok := GetTotalBalance([]Account{})
+		if ok {
+			t.Errorf("expected ok as %t, got %t", false, ok)
 		}
 	})
 }
