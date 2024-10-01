@@ -16,6 +16,13 @@ var (
 		slices.SortFunc(b, accountIdComparator)
 		return slices.Equal(a, b)
 	}
+	accountLastNameBinaryOperator = func(left, right Account) Account {
+		if left.LastName < right.LastName {
+			return left
+		} else {
+			return right
+		}
+	}
 )
 
 func TestFindRichestPerson(t *testing.T) {
@@ -29,70 +36,64 @@ func TestFindRichestPerson(t *testing.T) {
 		{
 			"finds richest person among multiple accounts",
 			true,
-			Accounts[3],
-			Accounts,
+			theRichestPerson,
+			accounts,
 			nil,
 		},
 		{
 			"returns false when accounts slice is nil",
 			false,
-			ZeroAccount,
+			zeroAccount,
 			nil,
 			nil,
 		},
 		{
 			"returns false when accounts slice is empty",
 			false,
-			ZeroAccount,
+			zeroAccount,
 			[]Account{},
+			nil,
+		},
+		{
+			"finds account with zero balance in single entry slice",
+			true,
+			zeroBalanceAccount,
+			[]Account{zeroBalanceAccount},
 			nil,
 		},
 		{
 			"finds account with zero balance",
 			true,
-			Accounts[9],
-			Accounts[9:],
+			zeroBalanceAccount,
+			append(negativeBalanceAccounts, zeroBalanceAccount),
 			nil,
 		},
 		{
-			"finds account with zero balance among several zero-balance accounts",
+			"finds account with negative balance in single entry slice",
 			true,
-			Accounts[9],
-			Accounts[6:10],
-			nil,
-		},
-		{
-			"finds account with negative balance",
-			true,
-			Accounts[6],
-			Accounts[6:7],
+			negativeBalanceAccounts[0],
+			negativeBalanceAccounts[:1],
 			nil,
 		},
 		{
 			"finds account with negative balance among several negative-balance accounts",
 			true,
-			Accounts[7],
-			Accounts[6:9],
+			accounts[7],
+			negativeBalanceAccounts,
 			nil,
 		},
 		{
 			"resolves balance collision using custom merge function",
 			true,
-			ConflictingAccount,
-			AccountsWithBalanceCollision,
-			func(left, right Account) Account {
-				if left.LastName < right.LastName {
-					return left
-				} else {
-					return right
-				}
-			},
+			conflictingAccount,
+			accountsWithBalanceCollision,
+			accountLastNameBinaryOperator,
 		},
 		{
 			"resolves balance collision using default merge function when mergeFunction is nil",
 			true,
-			ConflictingAccount,
-			AccountsWithBalanceCollision,
+			conflictingAccount,
+			accountsWithBalanceCollision,
 			nil,
 		},
 	}
@@ -118,8 +119,8 @@ func TestPartitionAccountsBySex(t *testing.T) {
 	}{
 		{
 			"partitions accounts by sex",
-			AccountsPartitionedBySex,
-			Accounts,
+			accountsPartitionedBySex,
+			accounts,
 		},
 		{
 			"returns empty map when accounts slice is nil",
@@ -145,15 +146,15 @@ func TestPartitionAccountsBySex(t *testing.T) {
 
 func TestGroupAccountsByEmailDomain(t *testing.T) {
 	t.Run("groups accounts by email domain", func(t *testing.T) {
-		want := AccountsGroupedByEmailDomain
-		got := GroupAccountsByEmailDomain(Accounts)
+		want := accountsGroupedByEmailDomain
+		got := GroupAccountsByEmailDomain(accounts)
 		if !maps.EqualFunc(got, want, accountSliceInAnyOrderComparator) {
 			t.Errorf("want %+v, got %+v", want, got)
 		}
 	})
 	t.Run("groups accounts and ignores corrupted emails", func(t *testing.T) {
-		want := AccountsGroupedByEmailDomain
-		got := GroupAccountsByEmailDomain(append(Accounts, Account{Email: "bademail"}))
+		want := accountsGroupedByEmailDomain
+		got := GroupAccountsByEmailDomain(append(accounts, Account{Email: "bademail"}))
 		if !maps.EqualFunc(got, want, accountSliceInAnyOrderComparator) {
 			t.Errorf("want %+v, got %+v", want, got)
 		}
