@@ -1,5 +1,34 @@
 package maps_and_slices
 
+import (
+	"github.com/shopspring/decimal"
+)
+
+type BinaryOperator[T any] func(left, right T) T
+
+var (
+	AccountIdBinaryOperator = func(left, right Account) Account {
+		if left.ID < right.ID {
+			return left
+		} else {
+			return right
+		}
+	}
+)
+
+// GetTotalBalance calculates and returns the total balance from a slice of accounts.
+// If the slice is empty or nil, it returns false using the comma-ok idiom.
+//
+// Params:
+//   - accounts: A slice of Account structures from which to calculate the total balance.
+//
+// Returns:
+//   - A decimal.Decimal representing the total balance of all accounts combined.
+//   - A boolean indicating whether the slice contained any accounts (false if the slice was empty).
+func GetTotalBalance(accounts []Account) (decimal.Decimal, bool) {
+	panic("not implemented")
+}
+
 // PartitionAccountsBySex partitions a slice of accounts into a map based on their sex.
 // The resulting map contains two keys: true for Male accounts and false for Female accounts.
 //
@@ -26,6 +55,18 @@ func GroupAccountsByEmailDomain(accounts []Account) map[string][]Account {
 	panic("not implemented")
 }
 
+// SortByLastNameThenByFirstName sorts a slice of accounts first by last name and then by first name.
+// It returns a new sorted slice of Account structures.
+//
+// Params:
+//   - accounts: A slice of Account structures to be sorted.
+//
+// Returns:
+//   - A new slice of Account structures sorted by last name and then by first name.
+func SortByLastNameThenByFirstName(accounts []Account) []Account {
+	panic("not implemented")
+}
+
 // FindRichestPerson finds and returns the account with the highest balance from a slice of accounts.
 // If the slice is empty, it returns false using the comma-ok idiom.
 //
@@ -36,21 +77,11 @@ func GroupAccountsByEmailDomain(accounts []Account) map[string][]Account {
 // Params:
 //   - accounts: A slice of Account structures to search through.
 //   - mergeFunction: A custom BinaryOperator that determines how to resolve ties
-//     between accounts with equal balances. If nil, AccountIdBinaryOperator is used.
+//     between accounts with equal balances. If nil, pre created AccountIdBinaryOperator is used.
 //
 // Returns:
 // - The Account with the highest balance.
 // - A boolean indicating whether the slice contained any accounts (false if the slice was empty).
 func FindRichestPerson(accounts []Account, mergeFunction BinaryOperator[Account]) (Account, bool) {
 	panic("not implemented")
-}
-
-type BinaryOperator[T any] func(left, right T) T
-
-func AccountIdBinaryOperator(left, right Account) Account {
-	if left.ID < right.ID {
-		return left
-	} else {
-		return right
-	}
 }

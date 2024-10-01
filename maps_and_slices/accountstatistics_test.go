@@ -2,6 +2,7 @@ package maps_and_slices
 
 import (
 	"cmp"
+	"github.com/shopspring/decimal"
 	"maps"
 	"slices"
 	"testing"
@@ -105,7 +106,7 @@ func TestFindRichestPerson(t *testing.T) {
 				t.Fatalf("expected ok as %t, got %t", tt.foundRichest, ok)
 			}
 			if tt.want != got {
-				t.Errorf("want %+v, got %+v", tt.want, got)
+				t.Errorf("want %v, got %v", tt.want, got)
 			}
 		})
 	}
@@ -138,7 +139,7 @@ func TestPartitionAccountsBySex(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := PartitionAccountsBySex(tt.accounts)
 			if !maps.EqualFunc(got, tt.partitioned, accountSliceInAnyOrderComparator) {
-				t.Errorf("want %+v, got %+v", tt.partitioned, got)
+				t.Errorf("want %v, got %v", tt.partitioned, got)
 			}
 		})
 	}
@@ -156,7 +157,44 @@ func TestGroupAccountsByEmailDomain(t *testing.T) {
 		want := accountsGroupedByEmailDomain
 		got := GroupAccountsByEmailDomain(append(accounts, Account{Email: "bademail"}))
 		if !maps.EqualFunc(got, want, accountSliceInAnyOrderComparator) {
-			t.Errorf("want %+v, got %+v", want, got)
+			t.Errorf("want %v, got %v", want, got)
+		}
+	})
+}
+
+func TestGetTotalBalance(t *testing.T) {
+	t.Run("gets total balance", func(t *testing.T) {
+		want := decimal.NewFromFloat(1_985_001.65)
+		got, ok := GetTotalBalance(accounts)
+		if !ok {
+			t.Fatalf("expected ok as %t, got %t", true, ok)
+		}
+		if !want.Equal(got) {
+			t.Errorf("want %v, got %v", want, got)
+		}
+	})
+	t.Run("returns false when accounts slice is empty", func(t *testing.T) {
+		_, ok := GetTotalBalance([]Account{})
+		if ok {
+			t.Errorf("expected ok as %t, got %t", false, ok)
+		}
+	})
+}
+
+func TestSortByLastNameThenByFirstName(t *testing.T) {
+	t.Run("not modifies accounts slice after sorting", func(t *testing.T) {
+		firstBeforeSort := accounts[1]
+		ninthBeforeSort := accounts[9]
+		SortByLastNameThenByFirstName(accounts)
+		if firstBeforeSort != accounts[1] || ninthBeforeSort != accounts[9] {
+			t.Errorf("function modifies accounts slice")
+		}
+	})
+	t.Run("sorts accounts by last name then by first name", func(t *testing.T) {
+		want := accountsSortedByLastNameThenByFirstName
+		got := SortByLastNameThenByFirstName(accounts)
+		if !slices.Equal(want, got) {
+			t.Errorf("want %v, got %v", want, got)
 		}
 	})
 }

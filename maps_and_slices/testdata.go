@@ -20,8 +20,10 @@ var (
 		Balance:      decimal.NewFromFloat(700000.30),
 	}
 
-	negativeBalanceAccounts      = accounts[6:9]
-	accountsWithBalanceCollision = append(accounts, conflictingAccount)
+	negativeBalanceAccounts                 = accounts[6:9]
+	accountsWithBalanceCollision            = append(accounts, conflictingAccount)
+	accountsSortedByLastNameThenByFirstName = []Account{accounts[5], accounts[9], accounts[2], accounts[6], accounts[0], accounts[8],
+		accounts[1], accounts[4], accounts[3], accounts[7]}
 
 	accountsPartitionedBySex     = map[bool][]Account{true: maleAccounts, false: femaleAccounts}
 	accountsGroupedByEmailDomain = map[string][]Account{
@@ -143,9 +145,9 @@ var accounts = []Account{
 	},
 	{
 		ID:           9,
-		FirstName:    "Poor",
-		LastName:     "Person",
-		Email:        "poorperson@gmail.com",
+		FirstName:    "Angel",
+		LastName:     "Johnson",
+		Email:        "angel@gmail.com",
 		Birthday:     parseDate("1977-06-18"),
 		Sex:          Female,
 		CreationDate: parseDate("2016-04-28"),
