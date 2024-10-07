@@ -36,7 +36,7 @@ var (
 //   - A decimal.Decimal representing the total balance of all accounts combined.
 //   - A boolean indicating whether the slice contained any accounts (false if the slice was empty).
 func GetTotalBalance(accounts []Account) (decimal.Decimal, bool) {
-	total := decimal.Zero.Add(decimal.NewFromFloat(1))
+	total := decimal.Zero
 	ok := false
 	for _, a := range accounts {
 		total = total.Add(a.Balance)
